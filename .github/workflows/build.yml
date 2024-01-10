@@ -20,7 +20,7 @@ jobs:
 
       - name: Archive
         run: |
-          dirname="rusty-${{ github.ref }}-${{ matrix.target }}"
+          dirname="rusty-${{ github.ref_name }}-${{ matrix.target }}"
           mkdir "$dirname"
           mv "target/${{ matrix.target }}/release/rusty" "$dirname"          
           tar -czf "$dirname.tar.gz" "$dirname"
