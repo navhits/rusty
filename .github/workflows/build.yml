@@ -1,8 +1,11 @@
 name: Rusty Build
 
 on:
-  release:
-    types: [created]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version'
+        required: true
 
 jobs:
   build:
@@ -20,7 +23,7 @@ jobs:
 
       - name: Archive
         run: |
-          dirname="rusty-${{ github.ref_name }}-${{ matrix.target }}"
+          dirname="rusty-${{ github.event.inputs.version }}-${{ matrix.target }}"
           mkdir "$dirname"
           mv "target/${{ matrix.target }}/release/rusty" "$dirname"          
           tar -czf "$dirname.tar.gz" "$dirname"
@@ -29,5 +32,7 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag_name: ${{ github.event.inputs.version }}
           files: |
             ${{ env.ASSET }}
