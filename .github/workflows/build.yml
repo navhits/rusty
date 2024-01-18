@@ -26,8 +26,8 @@ jobs:
         uses: indygreg/apple-code-sign-action@v1
         with: 
           input_path: target/universal2-apple-darwin/release/rusty
-          p12_file: cert.p12
-          p12_password: ${{ secrets.PASSWORD }}
+          # p12_file: cert.p12
+          # p12_password: ${{ secrets.PASSWORD }}
 
       - name: Archive
         run: |
