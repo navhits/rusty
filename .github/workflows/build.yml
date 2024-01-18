@@ -20,12 +20,20 @@ jobs:
       - name: Build
         run: |
           cargo zigbuild --target ${{ matrix.target }} --release
+      
+      - name: Conditional Step
+        if: matrix.target == 'universal2-apple-darwin'
+        uses: indygreg/apple-code-sign-action@v1
+        with: 
+          input_path: target/universal2-apple-darwin/release/rusty
+          p12_file: cert.p12
+          p12_password: ${{ secrets.PASSWORD }}
 
       - name: Archive
         run: |
           dirname="rusty-${{ github.event.inputs.version }}-${{ matrix.target }}"
           mkdir "$dirname"
-          mv "target/${{ matrix.target }}/release/rusty" "$dirname"          
+          mv "target/${{ matrix.target }}/release/rusty" "$dirname"
           tar -czf "$dirname.tar.gz" "$dirname"
           echo "ASSET=$dirname.tar.gz" >> $GITHUB_ENV
 
